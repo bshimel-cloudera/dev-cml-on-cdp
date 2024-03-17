@@ -37,11 +37,9 @@ from pyspark.sql.functions import col
 
 import cml.data_v1 as cmldata
 from env import S3_ROOT, S3_HOME, CONNECTION_NAME
-import contextlib
 
 conn = cmldata.get_connection(CONNECTION_NAME)
-with contextlib.redirect_stdout(None): # Suppress log messages
-    spark = conn.get_spark_session()
+spark = conn.get_spark_session()
 
 # ### Load the data
 
