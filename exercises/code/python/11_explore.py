@@ -43,9 +43,11 @@ import seaborn as sns
 # Create a SparkSession:
 import cml.data_v1 as cmldata
 from env import S3_ROOT, S3_HOME, CONNECTION_NAME
+import contextlib
 
 conn = cmldata.get_connection(CONNECTION_NAME)
-spark = conn.get_spark_session()
+with contextlib.redirect_stdout(None): # Suppress log messages
+    spark = conn.get_spark_session()
 
 # Load the enhanced ride data from HDFS:
 rides_sdf = spark.read.parquet(S3_ROOT + "/duocar/joined_all")

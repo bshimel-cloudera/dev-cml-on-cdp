@@ -28,14 +28,16 @@ import seaborn as sns
 from pyspark.sql import SparkSession
 import cml.data_v1 as cmldata
 from env import S3_ROOT, S3_HOME, CONNECTION_NAME
+import contextlib
 
 conn = cmldata.get_connection(CONNECTION_NAME)
-spark = (
+with contextlib.redirect_stdout(None): # Suppress log messages
+  spark = (
             SparkSession.builder.appName(conn.app_name)
             .config("spark.sql.hive.hwc.execution.mode", "spark")
             .config("spark.yarn.access.hadoopFileSystems", conn.hive_external_dir)
             .getOrCreate()
-        )
+          )
 
 
 # ## Load the data
