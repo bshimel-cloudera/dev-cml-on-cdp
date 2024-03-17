@@ -28,16 +28,14 @@ import seaborn as sns
 from pyspark.sql import SparkSession
 import cml.data_v1 as cmldata
 from env import S3_ROOT, S3_HOME, CONNECTION_NAME
-import contextlib
 
 conn = cmldata.get_connection(CONNECTION_NAME)
-with contextlib.redirect_stdout(None): # Suppress log messages
-  spark = (
+spark = (
             SparkSession.builder.appName(conn.app_name)
             .config("spark.sql.hive.hwc.execution.mode", "spark")
             .config("spark.yarn.access.hadoopFileSystems", conn.hive_external_dir)
             .getOrCreate()
-          )
+        )
 
 
 # ## Load the data
@@ -75,8 +73,8 @@ from pyspark.ml.feature import StringIndexer
 indexer = StringIndexer(inputCol="vehicle_color", outputCol="vehicle_color_indexed")
 
 # Encode `vehicle_color_indexed`:
-from pyspark.ml.feature import OneHotEncoder
-encoder = OneHotEncoder(inputCols=["vehicle_color_indexed"], outputCols=["vehicle_color_encoded"])
+from pyspark.ml.feature import OneHotEncoderEstimator
+encoder = OneHotEncoderEstimator(inputCols=["vehicle_color_indexed"], outputCols=["vehicle_color_encoded"])
 
 # Select and assemble the features:
 from pyspark.ml.feature import VectorAssembler
