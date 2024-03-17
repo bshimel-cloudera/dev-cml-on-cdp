@@ -51,7 +51,7 @@ from env import S3_ROOT, S3_HOME, CONNECTION_NAME
 import contextlib
 
 conn = cmldata.get_connection(CONNECTION_NAME)
-with contextlib.redirect_stdout(None): # Suppress log messages
+with contextlib.redirect_stderr(None): # Suppress log messages
     spark = conn.get_spark_session()
 
 # Set environment variables
